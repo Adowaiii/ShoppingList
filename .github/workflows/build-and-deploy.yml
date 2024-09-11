@@ -14,11 +14,6 @@ jobs:
         with:
           ref: gh-pages
 
-      - name: List files 📁
-        run: |
-          echo "Repository structure:"
-          ls -R
-
       - name: Inject Firebase config 🔧
         run: |
           sed -i 's|__FIREBASE_API_KEY__|'${{ secrets.FIREBASE_API_KEY }}'|g' *.js
@@ -27,3 +22,11 @@ jobs:
           sed -i 's|__FIREBASE_STORAGE_BUCKET__|'${{ secrets.FIREBASE_STORAGE_BUCKET }}'|g' *.js
           sed -i 's|__FIREBASE_MESSAGING_SENDER_ID__|'${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'|g' *.js
           sed -i 's|__FIREBASE_APP_ID__|'${{ secrets.FIREBASE_APP_ID }}'|g' *.js
+
+      - name: Commit and Push changes 🚀
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "Update Firebase configuration" || echo "No changes to commit"
+          git push
