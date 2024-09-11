@@ -11,6 +11,11 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
+        
+      - name: List files 📁
+        run: |
+          echo "Repository structure:"
+          ls -R
 
       - name: Inject Firebase config 🔧
         run: |
