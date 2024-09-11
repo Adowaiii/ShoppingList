@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Assuming your source code is on the main branch
+      - main
 
 jobs:
   deploy:
@@ -12,9 +12,19 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
 
+      - name: Inject Firebase config 🔧
+        run: |
+          sed -i 's|__FIREBASE_API_KEY__|'${{ secrets.FIREBASE_API_KEY }}'|g' *.js
+          sed -i 's|__FIREBASE_AUTH_DOMAIN__|'${{ secrets.FIREBASE_AUTH_DOMAIN }}'|g' *.js
+          sed -i 's|__FIREBASE_PROJECT_ID__|'${{ secrets.FIREBASE_PROJECT_ID }}'|g' *.js
+          sed -i 's|__FIREBASE_STORAGE_BUCKET__|'${{ secrets.FIREBASE_STORAGE_BUCKET }}'|g' *.js
+          sed -i 's|__FIREBASE_MESSAGING_SENDER_ID__|'${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'|g' *.js
+          sed -i 's|__FIREBASE_APP_ID__|'${{ secrets.FIREBASE_APP_ID }}'|g' *.js
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
-          branch: gh-pages  # The branch the action should deploy to
+          branch: gh-pages
           folder: .
-          clean: true  # Automatically remove deleted files from the deploy branch
+          clean: false
+          token: ${{ secrets.PAT }}
