@@ -22,21 +22,15 @@ jobs:
           git checkout gh-pages
           git pull origin gh-pages
 
-      # Step 3: Debug - Check current working directory and list files
-      - name: Check directory and list files 🗂️
-        run: |
-          pwd
-          ls -al  # List all files to see where the .js files are located
-
       # Step 4: Inject Firebase config into JavaScript files
       - name: Inject Firebase config 🔧
         run: |
-          sed -i 's|__FIREBASE_API_KEY__|'${{ secrets.FIREBASE_API_KEY }}'|g' *.js
-          sed -i 's|__FIREBASE_AUTH_DOMAIN__|'${{ secrets.FIREBASE_AUTH_DOMAIN }}'|g' *.js
-          sed -i 's|__FIREBASE_PROJECT_ID__|'${{ secrets.FIREBASE_PROJECT_ID }}'|g' *.js
-          sed -i 's|__FIREBASE_STORAGE_BUCKET__|'${{ secrets.FIREBASE_STORAGE_BUCKET }}'|g' *.js
-          sed -i 's|__FIREBASE_MESSAGING_SENDER_ID__|'${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'|g' *.js
-          sed -i 's|__FIREBASE_APP_ID__|'${{ secrets.FIREBASE_APP_ID }}'|g' *.js
+          sed -i 's|__FIREBASE_API_KEY__|'${{ secrets.FIREBASE_API_KEY }}'|g' assets/*.js
+          sed -i 's|__FIREBASE_AUTH_DOMAIN__|'${{ secrets.FIREBASE_AUTH_DOMAIN }}'|g' assets/*.js
+          sed -i 's|__FIREBASE_PROJECT_ID__|'${{ secrets.FIREBASE_PROJECT_ID }}'|g' assets/*.js
+          sed -i 's|__FIREBASE_STORAGE_BUCKET__|'${{ secrets.FIREBASE_STORAGE_BUCKET }}'|g' assets/*.js
+          sed -i 's|__FIREBASE_MESSAGING_SENDER_ID__|'${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'|g' assets/*.js
+          sed -i 's|__FIREBASE_APP_ID__|'${{ secrets.FIREBASE_APP_ID }}'|g' assets/*.js
 
       # Step 5: Commit and Push changes
       - name: Commit and Push changes 🚀
