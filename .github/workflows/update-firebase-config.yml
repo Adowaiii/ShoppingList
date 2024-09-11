@@ -22,7 +22,13 @@ jobs:
           git checkout gh-pages
           git pull origin gh-pages
 
-      # Step 3: Inject Firebase config into your JavaScript files
+      # Step 3: Debug - Check current working directory and list files
+      - name: Check directory and list files 🗂️
+        run: |
+          pwd
+          ls -al  # List all files to see where the .js files are located
+
+      # Step 4: Inject Firebase config into JavaScript files
       - name: Inject Firebase config 🔧
         run: |
           sed -i 's|__FIREBASE_API_KEY__|'${{ secrets.FIREBASE_API_KEY }}'|g' *.js
@@ -32,7 +38,7 @@ jobs:
           sed -i 's|__FIREBASE_MESSAGING_SENDER_ID__|'${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'|g' *.js
           sed -i 's|__FIREBASE_APP_ID__|'${{ secrets.FIREBASE_APP_ID }}'|g' *.js
 
-      # Step 4: Commit and Push changes
+      # Step 5: Commit and Push changes
       - name: Commit and Push changes 🚀
         run: |
           git config --local user.email "action@github.com"
