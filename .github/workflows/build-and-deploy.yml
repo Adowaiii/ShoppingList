@@ -1,17 +1,19 @@
-name: Deploy to GitHub Pages
+name: Update Firebase Config
 
 on:
   push:
     branches:
-      - main
+      - gh-pages
 
 jobs:
-  deploy:
+  update-config:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout gh-pages 🛎️
         uses: actions/checkout@v2
-        
+        with:
+          ref: gh-pages
+
       - name: List files 📁
         run: |
           echo "Repository structure:"
@@ -25,11 +27,3 @@ jobs:
           sed -i 's|__FIREBASE_STORAGE_BUCKET__|'${{ secrets.FIREBASE_STORAGE_BUCKET }}'|g' *.js
           sed -i 's|__FIREBASE_MESSAGING_SENDER_ID__|'${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'|g' *.js
           sed -i 's|__FIREBASE_APP_ID__|'${{ secrets.FIREBASE_APP_ID }}'|g' *.js
-
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@4.1.5
-        with:
-          branch: gh-pages
-          folder: .
-          clean: false
-          token: ${{ secrets.PAT }}
