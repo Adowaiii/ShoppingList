@@ -3,17 +3,26 @@ name: Update Firebase Config
 on:
   push:
     branches:
-      - gh-pages
+      - main  # or your default branch name
 
 jobs:
   update-config:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout gh-pages 🛎️
+      # Step 1: Checkout the repository
+      - name: Checkout main branch 🛎️
         uses: actions/checkout@v2
         with:
-          ref: gh-pages
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
+      # Step 2: Switch to the gh-pages branch
+      - name: Checkout gh-pages branch
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+          git pull origin gh-pages
+
+      # Step 3: Inject Firebase config into your JavaScript files
       - name: Inject Firebase config 🔧
         run: |
           sed -i 's|__FIREBASE_API_KEY__|'${{ secrets.FIREBASE_API_KEY }}'|g' *.js
@@ -23,10 +32,11 @@ jobs:
           sed -i 's|__FIREBASE_MESSAGING_SENDER_ID__|'${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'|g' *.js
           sed -i 's|__FIREBASE_APP_ID__|'${{ secrets.FIREBASE_APP_ID }}'|g' *.js
 
+      # Step 4: Commit and Push changes
       - name: Commit and Push changes 🚀
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
-          git commit -m "Update Firebase configuration" || echo "No changes to commit"
-          git push
+          git diff --exit-code || git commit -m "Update Firebase configuration"
+          git push origin gh-pages
